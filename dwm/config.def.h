@@ -28,7 +28,7 @@ static const char dmenufont[]       = "0xProto Nerd Font:size=9";
 /*};*/
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  " };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -49,11 +49,11 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 #include "fibonacci.c"
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "[]=",      tile },    /* first entry is default */
-	{ "><>",      NULL },    /* no layout function means floating behavior */
-	{ "[M]",      monocle },
- 	{ "[@]",      spiral },
- 	{ "[\\]",      dwindle },
+	{ "|  ",      tile },    /* first entry is default */
+	{ "|  ",      NULL },    /* no layout function means floating behavior */
+	{ "|  ",      monocle },
+ 	{ "|  ",      spiral },
+ 	{ "|  ",      dwindle },
 };
 
 /* key definitions */
@@ -124,7 +124,7 @@ static const Key keys[] = {
   { 0, XF86XK_AudioRaiseVolume, spawn, {.v = vol_up } },
   { 0, XF86XK_AudioMute,        spawn, {.v = vol_mute } },
   /* Screenshot (full screen) */
-{ 0, XK_Print, spawn, SHCMD("flameshot full -p ~/Pix/Screenshot") },
+{ 0, XK_Print, spawn, SHCMD("flameshot full -p ~/Pix/Screenshot/*") },
 /* Screenshot (interactive selection) */
 { ShiftMask, XK_Print, spawn, SHCMD("flameshot gui") },
 
