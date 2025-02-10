@@ -106,6 +106,6 @@ clock() {
 # Infinite loop to update the dwm status bar
 while true; do
   xsetroot -name "   $(cpu)   |   $(mem)   |   $(hdd)   |  $(power)   |   $(temp)   |  $(volume)   |   $(brightness)   |  $(clock) "
-  sleep 5s
+  sleep 1s
 done &
 
