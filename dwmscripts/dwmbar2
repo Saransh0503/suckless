@@ -27,11 +27,11 @@ hdd() {
 temp() {
   TEMP="$(sensors | awk 'BEGIN {i = 0; t = 0} /Core/ {++i; t += $3} END {if (i > 0) {printf "%0.1f", t / i}}')"
   if (( $(echo "$TEMP < 40" | bc -l) )); then
-    SYMBOL="❄️"
+    SYMBOL=""
   elif (( $(echo "$TEMP >= 40" | bc -l) && $(echo "$TEMP <= 70" | bc -l) )); then
-    SYMBOL="✅"
+    SYMBOL=""
   else
-    SYMBOL="🔥"
+    SYMBOL=""
   fi
   echo -e "$TEMP°C $SYMBOL"
 }
@@ -47,11 +47,15 @@ power() {
 
   # Determine the battery symbol based on the average percentage
   if (( AVG >= 80 )); then
-    SYMBOL="🔋" # High battery
+    SYMBOL="" # Full battery
+  elif (( AVG >= 60 )); then
+    SYMBOL="" # 3/4 battery
   elif (( AVG >= 40 )); then
-    SYMBOL="🔋" # Medium battery
+    SYMBOL="" # 1/2 battery
+  elif (( AVG >= 20 )); then
+    SYMBOL="" # 1/4 battery
   else
-    SYMBOL="🔋" # Low battery
+    SYMBOL="" # Empty battery
   fi
 
   # Display battery status with the symbol
@@ -88,7 +92,7 @@ brightness() {
   elif (( percent <= 50 )); then
     SYMBOL="🌓"
   else
-    SYMBOL="🌕"
+    SYMBOL="☀️"
   fi
   echo -e "$percent% $SYMBOL"
 }
