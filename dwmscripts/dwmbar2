@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Function to calculate CPU usage
+# CPU Usage
 cpu() {
   read cpu a b c previdle rest < /proc/stat
   prevtotal=$((a + b + c + previdle))
@@ -11,50 +11,89 @@ cpu() {
   echo -e "$cpu%"
 }
 
-# Function to get RAM usage
+# RAM Usage
 mem() {
   mem="$(free -h | awk '/^Mem/ { print $3 }' | sed 's/i//g')"
   echo -e "$mem"
 }
 
-# Function to get disk usage
+# Disk Usage
 hdd() {
   hdd="$(df -h --output=used,pcent / | tail -1)"
   echo -e "$hdd"
 }
 
-# Function to get CPU temperature
+# CPU Temperature with dynamic symbol
 temp() {
-  TEMP="$(sensors | awk 'BEGIN {i = 0; t = 0} /Core/ {++i; t += $3} END {if (i > 0) {printf "%0.1f°C", t / i}}')"
-  echo -e "$TEMP"
+  TEMP="$(sensors | awk 'BEGIN {i = 0; t = 0} /Core/ {++i; t += $3} END {if (i > 0) {printf "%0.1f", t / i}}')"
+  if (( $(echo "$TEMP < 40" | bc -l) )); then
+    SYMBOL="❄️"
+  elif (( $(echo "$TEMP >= 40" | bc -l) && $(echo "$TEMP <= 70" | bc -l) )); then
+    SYMBOL="✅"
+  else
+    SYMBOL="🔥"
+  fi
+  echo -e "$TEMP°C $SYMBOL"
 }
 
-# Function to get battery status
+## BATT
 power() {
-  PWR=$(cat /sys/class/power_supply/BAT0/capacity)
-  echo -e "$PWR%"
+  # Read battery capacities
+  BAT1=$(cat /sys/class/power_supply/BAT0/capacity)
+  BAT2=$(cat /sys/class/power_supply/BAT1/capacity)
+  
+  # Calculate the average battery percentage
+  AVG=$(( (BAT1 + BAT2) / 2 ))
+
+  # Determine the battery symbol based on the average percentage
+  if (( AVG >= 80 )); then
+    SYMBOL="🔋" # High battery
+  elif (( AVG >= 40 )); then
+    SYMBOL="🔋" # Medium battery
+  else
+    SYMBOL="🔋" # Low battery
+  fi
+
+  # Display battery status with the symbol
+  echo -e "$SYMBOL $AVG%"
 }
 
-# Function to get audio volume and mute status
+
+# Volume with dynamic symbol
 volume() {
-  volume=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\d+%' | head -1)
+  volume=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\d+%' | head -1 | tr -d '%')
   muted=$(pactl get-sink-mute @DEFAULT_SINK@ | grep -o 'yes\|no')
   if [ "$muted" = "yes" ]; then
-    echo "🔇 Muted"
+    SYMBOL="🔇"
+    echo -e "$SYMBOL Muted"
   else
-    echo "🔊 $volume"
+    if (( volume == 0 )); then
+      SYMBOL="🔈"
+    elif (( volume <= 50 )); then
+      SYMBOL="🔉"
+    else
+      SYMBOL="🔊"
+    fi
+    echo -e "$SYMBOL $volume%"
   fi
 }
 
-# Function to get screen brightness
+# Screen Brightness with dynamic symbol
 brightness() {
   brightness=$(cat /sys/class/backlight/*/brightness)
   max_brightness=$(cat /sys/class/backlight/*/max_brightness)
   percent=$((100 * brightness / max_brightness))
-  echo -e "$percent%"
+  if (( percent <= 20 )); then
+    SYMBOL="🌑"
+  elif (( percent <= 50 )); then
+    SYMBOL="🌓"
+  else
+    SYMBOL="🌕"
+  fi
+  echo -e "$percent% $SYMBOL"
 }
 
-# Function to get the current date and time
+# Date and Time
 clock() {
   dte="$(date +"%a, %B %d %I:%M %p" | sed 's/  / /g')"
   echo -e "$dte"
@@ -62,7 +101,7 @@ clock() {
 
 # Infinite loop to update the dwm status bar
 while true; do
-  xsetroot -name "   $(cpu)   |   $(mem)   |   $(hdd)   |   $(power)   |   $(temp)   |  $(volume)   |   $(brightness)   |  $(clock) "
+  xsetroot -name "   $(cpu)   |   $(mem)   |   $(hdd)   |  $(power)   |   $(temp)   |  $(volume)   |   $(brightness)   |  $(clock) "
   sleep 5s
 done &
 
