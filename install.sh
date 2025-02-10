@@ -20,7 +20,7 @@ DMENU_REPO="$HOME/suckless/dmenu"
 # Function to check for dependencies
 check_dependencies() {
   echo -e "${YELLOW}Checking for required dependencies...${RESET}"
-  dependencies=("git" "make" "gcc" "xorg" "xorg-xinit" "libx11" "libxft" "libxinerama")
+  dependencies=("git" "make" "gcc" "xorg" "xorg-xinit" "libx11" "libxft" "libxinerama" "brightnessctl" "pamixer" "flameshot" "python-pywal" "feh" )
   for dep in "${dependencies[@]}"; do
     if ! command -v "$dep" &> /dev/null; then
       echo -e "${RED}Error: $dep is not installed.${RESET}"
