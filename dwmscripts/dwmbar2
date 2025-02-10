@@ -1,88 +1,68 @@
 #!/bin/bash
 
-##CPU
+# Function to calculate CPU usage
 cpu() {
   read cpu a b c previdle rest < /proc/stat
-  prevtotal=$((a+b+c+previdle))
+  prevtotal=$((a + b + c + previdle))
   sleep 0.5
   read cpu a b c idle rest < /proc/stat
-  total=$((a+b+c+idle))
-  cpu=$((100*( (total-prevtotal) - (idle-previdle) ) / (total-prevtotal) ))
+  total=$((a + b + c + idle))
+  cpu=$((100 * ((total - prevtotal) - (idle - previdle)) / (total - prevtotal)))
   echo -e "$cpu%"
 }
 
-## RAM
+# Function to get RAM usage
 mem() {
-  mem="$(free -h | awk '/^Mem/ { print $3 }' | sed s/i//g)"
+  mem="$(free -h | awk '/^Mem/ { print $3 }' | sed 's/i//g')"
   echo -e "$mem"
 }
 
-## DISK
+# Function to get disk usage
 hdd() {
-  hdd="$(df -h | awk 'NR==4{print $3, $5}')"
-  echo -e " $hdd"
+  hdd="$(df -h --output=used,pcent / | tail -1)"
+  echo -e "$hdd"
 }
 
-## TEMP
+# Function to get CPU temperature
 temp() {
-TEMP="$(sensors|awk 'BEGIN{i=0;t=0;b=0}/id [0-9]/{b=$4};/Core/{++i;t+=$3}END{if(i>0){printf("%0.1f\n",t/i)}else{sub(/[^0-9.]/,"",b);print b}}')"
-echo -e  " $TEMP "
+  TEMP="$(sensors | awk 'BEGIN {i = 0; t = 0} /Core/ {++i; t += $3} END {if (i > 0) {printf "%0.1f°C", t / i}}')"
+  echo -e "$TEMP"
 }
 
-## BATT
+# Function to get battery status
 power() {
-PWR=$(cat /sys/class/power_supply/BAT0/capacity)
-echo -e "  $PWR%"
+  PWR=$(cat /sys/class/power_supply/BAT0/capacity)
+  echo -e "$PWR%"
 }
 
-## VOL
+# Function to get audio volume and mute status
 volume() {
-    volume=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\d+%' | head -1)
-    muted=$(pactl get-sink-mute @DEFAULT_SINK@ | grep -o 'yes\|no')
-    if [ "$muted" = "yes" ]; then
-        echo "🔇 Muted"
-    else
-        echo "🔊 $volume"
-    fi
+  volume=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\d+%' | head -1)
+  muted=$(pactl get-sink-mute @DEFAULT_SINK@ | grep -o 'yes\|no')
+  if [ "$muted" = "yes" ]; then
+    echo "🔇 Muted"
+  else
+    echo "🔊 $volume"
+  fi
 }
 
-#volume() {
-#VOL="$(awk -F"[][]" '/Left:/ { print $2 }' <(amixer sget Master))"
-#echo -e "$VOL"
-#}
-
-## SCREEN BRIGHTNESS
-
+# Function to get screen brightness
 brightness() {
-    brightness=$(cat /sys/class/backlight/*/brightness)
-    max_brightness=$(cat /sys/class/backlight/*/max_brightness)
-    percent=$(( 100 * brightness / max_brightness ))
-    echo -e "$percent%"
+  brightness=$(cat /sys/class/backlight/*/brightness)
+  max_brightness=$(cat /sys/class/backlight/*/max_brightness)
+  percent=$((100 * brightness / max_brightness))
+  echo -e "$percent%"
 }
 
-#backlight() {
-#BLT="$(xbacklight -get | awk '{print int($1)}')"
-#echo -e "$BLT%"	
-#}
-
-## UPDATES
-#upd() {
-#PAC=$(< /home/steve/dwmscripts/dwmupdates.txt)
-#echo -e "$PAC"
-#}
-
-## DATE
+# Function to get the current date and time
 clock() {
-dte="$(date +"%a, %B %d %l:%M%p"| sed 's/  / /g')"
-echo -e "$dte "
+  dte="$(date +"%a, %B %d %I:%M %p" | sed 's/  / /g')"
+  echo -e "$dte"
 }
 
+# Infinite loop to update the dwm status bar
 while true; do
-
-#xsetroot -name "|  $(cpu) |  $(mem) |   $(hdd) |  $(power) |  $(temp) |   $(volume) | $(date) |"
-	xsetroot -name "   $( cpu )   |   $( mem )  |   $( hdd )  |   $( power )  |   $( temp ) |  $( volume )  |    $( brightness )  |  $( clock ) "
-	 
-	sleep 5s
-	
+  xsetroot -name "   $(cpu)   |   $(mem)   |   $(hdd)   |   $(power)   |   $(temp)   |  $(volume)   |   $(brightness)   |  $(clock) "
+  sleep 5s
 done &
 
