@@ -44,5 +44,3 @@ The list of patches install are:1) urg-border 2) alwayscenter 3) attachbottom 4)
 
 ![image](https://github.com/Saransh0503/my_vaults/blob/main/pix/2025-02-11_11-52.png)
 
-## buy me a coffee (UPI)
-sahil115jangid@axl
