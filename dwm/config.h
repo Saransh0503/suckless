@@ -124,7 +124,7 @@ static const Key keys[] = {
   { 0, XF86XK_AudioRaiseVolume, spawn, {.v = vol_up } },
   { 0, XF86XK_AudioMute,        spawn, {.v = vol_mute } },
   /* Screenshot (full screen) */
-{ 0, XK_Print, spawn, SHCMD("flameshot full -p ~/Pix/Screenshot/*") },
+{ 0, XK_Print, spawn, SHCMD("flameshot full -p ~/pix/Screenshot/") },
 /* Screenshot (interactive selection) */
 { ShiftMask, XK_Print, spawn, SHCMD("flameshot gui") },
 
