@@ -32,15 +32,15 @@ make sure that u download these resources (suckless) in home directory for this 
 Install all the dependencies for better use of the window manager
 
 ## Patches
-
-The list of patches install are 
-    1) urg-border
-    2) alwayscenter
-    3) attachbottom
-    4) fibonacci
-    5) uselessgap
-    6) xrdb
-
+```
+The list of patches install are:
+                                1) urg-border
+                                2) alwayscenter
+                                3) attachbottom
+                                4) fibonacci
+                                5) uselessgap
+                                6) xrdb
+```
 
 ## Screenshots
 
