@@ -29,7 +29,18 @@ chmod +x install.sh
 ```
 
 make sure that u download these resources (suckless) in home directory for this command to work .
-Install all the dependencies for better use of the window manager 
+Install all the dependencies for better use of the window manager
+
+## Patches
+
+The list of patches install are 
+    1) urg-border
+    2) alwayscenter
+    3) attachbottom
+    4) fibonacci
+    5) uselessgap
+    6) xrdb
+
 
 ## Screenshots
 
