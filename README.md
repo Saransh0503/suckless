@@ -1,5 +1,6 @@
 # DWM (Dynamic Window Manager)
 >DEVELOPER: Saransh singh
+
 >Mail: Saranshsingh2006@gmail.com
 
 >Rolling release version 0.1
