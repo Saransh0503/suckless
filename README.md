@@ -37,7 +37,7 @@ Install all the dependencies for better use of the window manager
 
 ## Patches (installed)
 
-The list of patches install are:1) urg-border 2) alwayscenter 3) attachbottom 4) fibonacci 5) uselessgap 6) xrdb
+The list of patches install are:1) urg-border 2) alwayscenter 3) attachbottom 4) fibonacci 5) uselessgap 6) xrdb 7) swallow 
 >NOTE: There is no need to patch as the patches have been installed in the dwm 
 
 ## Screenshots
