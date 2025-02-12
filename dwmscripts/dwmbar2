@@ -27,11 +27,11 @@ hdd() {
 temp() {
   TEMP="$(sensors | awk 'BEGIN {i = 0; t = 0} /Core/ {++i; t += $3} END {if (i > 0) {printf "%0.1f", t / i}}')"
   if (( $(echo "$TEMP < 40" | bc -l) )); then
-    SYMBOL=""
+    SYMBOL="  "
   elif (( $(echo "$TEMP >= 40" | bc -l) && $(echo "$TEMP <= 70" | bc -l) )); then
-    SYMBOL=""
+    SYMBOL="  "
   else
-    SYMBOL=""
+    SYMBOL="  "
   fi
   echo -e "$TEMP°C $SYMBOL"
 }
@@ -47,15 +47,15 @@ power() {
 
   # Determine the battery symbol based on the average percentage
   if (( AVG >= 80 )); then
-    SYMBOL="" # Full battery
+    SYMBOL="  " # Full battery
   elif (( AVG >= 60 )); then
-    SYMBOL="" # 3/4 battery
+    SYMBOL="  " # 3/4 battery
   elif (( AVG >= 40 )); then
-    SYMBOL="" # 1/2 battery
+    SYMBOL="  " # 1/2 battery
   elif (( AVG >= 20 )); then
-    SYMBOL="" # 1/4 battery
+    SYMBOL="  " # 1/4 battery
   else
-    SYMBOL="" # Empty battery
+    SYMBOL="  " # Empty battery
   fi
 
   # Display battery status with the symbol
@@ -68,15 +68,15 @@ volume() {
   volume=$(pactl get-sink-volume @DEFAULT_SINK@ | grep -oP '\d+%' | head -1 | tr -d '%')
   muted=$(pactl get-sink-mute @DEFAULT_SINK@ | grep -o 'yes\|no')
   if [ "$muted" = "yes" ]; then
-    SYMBOL="🔇"
+    SYMBOL=" 🔇 "
     echo -e "$SYMBOL Muted"
   else
     if (( volume == 0 )); then
-      SYMBOL="🔈"
+      SYMBOL=" 🔈 "
     elif (( volume <= 50 )); then
-      SYMBOL="🔉"
+      SYMBOL=" 🔉 "
     else
-      SYMBOL="🔊"
+      SYMBOL=" 🔊 "
     fi
     echo -e "$SYMBOL $volume%"
   fi
@@ -88,11 +88,11 @@ brightness() {
   max_brightness=$(cat /sys/class/backlight/*/max_brightness)
   percent=$((100 * brightness / max_brightness))
   if (( percent <= 20 )); then
-    SYMBOL="🌑"
+    SYMBOL=" 🌑 "
   elif (( percent <= 50 )); then
-    SYMBOL="🌓"
-  else
-    SYMBOL="☀️"
+    SYMBOL=" 🌓 "
+  else 
+    SYMBOL="  "
   fi
   echo -e "$percent% $SYMBOL"
 }
@@ -105,7 +105,7 @@ clock() {
 
 # Infinite loop to update the dwm status bar
 while true; do
-  xsetroot -name "   $(cpu)   |   $(mem)   |   $(hdd)   |  $(power)   |   $(temp)   |  $(volume)   |   $(brightness)   |  $(clock) "
-  sleep 1s
+  xsetroot -name "   $(cpu)   |   $(mem)   |   $(hdd)   |  $(power)   |   $(temp)   |  $(volume)   |   $(brightness)   |   $(clock) "
+  sleep 3s
 done &
 
