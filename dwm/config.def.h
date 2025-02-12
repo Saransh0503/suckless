@@ -7,6 +7,7 @@
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
 static const unsigned int gappx     = 3;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
+static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "0xProto Nerd Font:size=9" };
@@ -35,9 +36,11 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class      instance    title       tags mask     isfloating   monitor */
-	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
-	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
+	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
+	{ "Gimp",    NULL,     NULL,           0,         1,          0,           0,        -1 },
+	{ "Firefox", NULL,     NULL,           1 << 8,    0,          0,          -1,        -1 },
+	{ "st-256color",      NULL,     NULL,           0,         0,          1,           0,        -1 },
+	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
 };
 
 /* layout(s) */
@@ -99,6 +102,9 @@ static const Key keys[] = {
 
   { MODKEY,                       XK_u,      spawn,          SHCMD("~/scripts/open-url.sh") },
   { MODKEY,                       XK_w,      spawn,          SHCMD("~/.local/bin/dwmstyle") },
+  { MODKEY|ShiftMask,  XK_End,      spawn,          SHCMD("systemctl poweroff") },   // Shutdown
+  { MODKEY|ShiftMask,  XK_Home,     spawn,          SHCMD("systemctl reboot") },    // Reboot
+  { MODKEY|ShiftMask,  XK_Insert,   spawn,          SHCMD("systemctl hibernate") }, // Hibernate
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },

@@ -1,27 +1,34 @@
 /* See LICENSE file for copyright and license details. */
 
+#include "X11/keysym.h"
+#include "X11/XF86keysym.h"
+
 /* appearance */
 static const unsigned int borderpx  = 1;        /* border pixel of windows */
-static const unsigned int gappx     = 6;        /* gaps between windows */
+static const unsigned int gappx     = 3;        /* gaps between windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "monospace:size=10" };
-static const char dmenufont[]       = "monospace:size=10";
-static char normbgcolor[]           = "#222222";
-static char normbordercolor[]       = "#444444";
-static char normfgcolor[]           = "#bbbbbb";
-static char selfgcolor[]            = "#eeeeee";
-static char selbordercolor[]        = "#005577";
-static char selbgcolor[]            = "#005577";
-static char *colors[][3] = {
-       /*               fg           bg           border   */
-       [SchemeNorm] = { normfgcolor, normbgcolor, normbordercolor },
-       [SchemeSel]  = { selfgcolor,  selbgcolor,  selbordercolor  },
-};
+static const char *fonts[]          = { "0xProto Nerd Font:size=9" };
+static const char dmenufont[]       = "0xProto Nerd Font:size=9";
+
+#include "/home/think/.cache/wal/my_colors.h"
+
+/*static char normbgcolor[]           = "#222222";*/
+/*static char normbordercolor[]       = "#444444";*/
+/*static char normfgcolor[]           = "#bbbbbb";*/
+/*static char selfgcolor[]            = "#eeeeee";*/
+/*static const char urgbordercolor[]  = "#ff0000";*/
+/*static char selbordercolor[]        = "#005577";*/
+/*static char selbgcolor[]            = "#005577";*/
+/*static char *colors[][3] = {*/
+/*                      fg           bg           border   */
+/*       [SchemeNorm] = { normfgcolor, normbgcolor, normbordercolor },*/
+/*       [SchemeSel]  = { selfgcolor,  selbgcolor,  selbordercolor  },*/
+/*};*/
 
 /* tagging */
-static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
+static const char *tags[] = { "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  " };
 
 static const Rule rules[] = {
 	/* xprop(1):
@@ -42,15 +49,15 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 #include "fibonacci.c"
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "[]=",      tile },    /* first entry is default */
-	{ "><>",      NULL },    /* no layout function means floating behavior */
-	{ "[M]",      monocle },
- 	{ "[@]",      spiral },
- 	{ "[\\]",      dwindle },
+	{ "|  ",      tile },    /* first entry is default */
+	{ "|  ",      NULL },    /* no layout function means floating behavior */
+	{ "|  ",      monocle },
+ 	{ "|  ",      spiral },
+ 	{ "|  ",      dwindle },
 };
 
 /* key definitions */
-#define MODKEY Mod1Mask
+#define MODKEY Mod4Mask
 #define TAGKEYS(KEY,TAG) \
 	{ MODKEY,                       KEY,      view,           {.ui = 1 << TAG} }, \
 	{ MODKEY|ControlMask,           KEY,      toggleview,     {.ui = 1 << TAG} }, \
@@ -62,27 +69,39 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", normbgcolor, "-nf", normfgcolor,
-"-sb", selbordercolor, "-sf", selfgcolor, NULL };
+static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", norm_bg, "-nf", norm_fg,
+"-sb", sel_border, "-sf", sel_fg, NULL };
 static const char *termcmd[]  = { "st", NULL };
-
+static const char *brightness_up[]   = { "brightnessctl", "set", "5%+", NULL };
+static const char *brightness_down[] = { "brightnessctl", "set", "5%-", NULL };
+static const char *vol_up[]   = { "pamixer", "--increase", "5", NULL };
+static const char *vol_down[] = { "pamixer", "--decrease", "5", NULL };
+static const char *vol_mute[] = { "pamixer", "--toggle-mute", NULL };
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
-	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
-	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY,                       XK_z,      spawn,          {.v = dmenucmd } },
+	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
+	{ MODKEY,                       XK_Tab,    focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
-	{ MODKEY,                       XK_Return, zoom,           {0} },
-	{ MODKEY,                       XK_Tab,    view,           {0} },
-	{ MODKEY|ShiftMask,             XK_c,      killclient,     {0} },
+	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
+	{ MODKEY|ShiftMask,             XK_Tab,    view,           {0} },
+	{ MODKEY,                       XK_q,      killclient,     {0} },
+  { MODKEY,                       XK_x,      setlayout,      {.v = &layouts[3]} }, // Spiral mode
+  { MODKEY,                       XK_c,      setlayout,      {.v = &layouts[4]} }, // Dwindle mode
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
+
+  { MODKEY,                       XK_u,      spawn,          SHCMD("~/scripts/open-url.sh") },
+  { MODKEY,                       XK_w,      spawn,          SHCMD("~/.local/bin/dwmstyle") },
+  { MODKEY|ShiftMask,  XK_End,      spawn,          SHCMD("systemctl poweroff") },   // Shutdown
+  { MODKEY|ShiftMask,  XK_Home,     spawn,          SHCMD("systemctl reboot") },    // Reboot
+  { MODKEY|ShiftMask,  XK_Insert,   spawn,          SHCMD("systemctl hibernate") }, // Hibernate
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },
@@ -102,6 +121,16 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+  { 0, XF86XK_MonBrightnessDown, spawn, {.v = brightness_down } },
+  { 0, XF86XK_MonBrightnessUp,   spawn, {.v = brightness_up } },
+  { 0, XF86XK_AudioLowerVolume, spawn, {.v = vol_down } },
+  { 0, XF86XK_AudioRaiseVolume, spawn, {.v = vol_up } },
+  { 0, XF86XK_AudioMute,        spawn, {.v = vol_mute } },
+  /* Screenshot (full screen) */
+{ 0, XK_Print, spawn, SHCMD("flameshot full -p ~/pix/Screenshot/") },
+/* Screenshot (interactive selection) */
+{ ShiftMask, XK_Print, spawn, SHCMD("flameshot gui") },
+
 };
 
 /* button definitions */

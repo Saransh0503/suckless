@@ -1,0 +1,16 @@
+--- dwm.c
++++ dwm.c
+@@ -2354,10 +2575,12 @@ main(int argc, char *argv[])
+ 		fputs("warning: no locale support\n", stderr);
+ 	if (!(dpy = XOpenDisplay(NULL)))
+ 		die("dwm: cannot open display");
++	if (!(xcon = XGetXCBConnection(dpy)))
++		die("dwm: cannot get xcb connection\n");
+ 	checkotherwm();
+ 	setup();
+ #ifdef __OpenBSD__
+-	if (pledge("stdio rpath proc exec", NULL) == -1)
++	if (pledge("stdio rpath proc exec ps", NULL) == -1)
+ 		die("pledge");
+ #endif /* __OpenBSD__ */
+ 	scan();

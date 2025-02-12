@@ -66,22 +66,53 @@
                                       if (value.addr[i] > 102) break; \
                                     } \
                                     if (i == 7) { \
-                                      strncpy(V, value.addr, 7); \
-                                      V[7] = '\0'; \
+                                      strncpy((char *)V, value.addr, sizeof(V) - 1); \
+                                      ((char *)V)[sizeof(V) - 1] = '\0'; \
                                     } \
                                   } \
                                 }
 
-/* enums */
+/*#define XRDB_LOAD_COLOR(R, V)                                             \*/
+/*    if (XrmGetResource(xrdb, R, NULL, &type, &value) == True &&           \*/
+/*        value.addr != NULL && strnlen(value.addr, 8) == 7 &&             \*/
+/*        value.addr[0] == '#') {                                           \*/
+/*        strncpy(V, value.addr, 7);                                        \*/
+/*        V[7] = '\0';                                                      \*/
+//    }
+
+/*char norm_border[8] = "#cccccc";*/
+/*char norm_bg[8]     = "#222222";*/
+/*char norm_fg[8]     = "#bbbbbb";*/
+/*char sel_border[8]  = "#005577";*/
+/*char sel_bg[8]      = "#005577";*/
+/*char sel_fg[8]      = "#eeeeee";*/
+
+/*char norm_border[8];*/
+/*char norm_bg[8];*/
+/*char norm_fg[8];*/
+/*char sel_border[8];*/
+/*char sel_bg[8];*/
+/*char sel_fg[8];*/
+
+/*static const char norm_border[8];*/
+/*static const char norm_bg[8];*/
+/*static const char norm_fg[8];*/
+/*static const char sel_border[8];*/
+/*static const char sel_bg[8];*/
+/*static const char sel_fg[8];*/
+
+
+
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
-enum { SchemeNorm, SchemeSel }; /* color schemes */
+/*enum { SchemeNorm, SchemeSel };  color schemes */
+enum { SchemeNorm, SchemeSel, SchemeUrg, SchemeLast }; /* color schemes */
 enum { NetSupported, NetWMName, NetWMState, NetWMCheck,
        NetWMFullscreen, NetActiveWindow, NetWMWindowType,
        NetWMWindowTypeDialog, NetClientList, NetLast }; /* EWMH atoms */
 enum { WMProtocols, WMDelete, WMState, WMTakeFocus, WMLast }; /* default atoms */
 enum { ClkTagBar, ClkLtSymbol, ClkStatusText, ClkWinTitle,
        ClkClientWin, ClkRootWin, ClkLast }; /* clicks */
-
+#include "/home/think/.cache/wal/my_colors.h"
 typedef union {
 	int i;
 	unsigned int ui;
@@ -1071,14 +1102,13 @@ loadxrdb()
 
     if (resm != NULL) {
       xrdb = XrmGetStringDatabase(resm);
-
       if (xrdb != NULL) {
-        XRDB_LOAD_COLOR("dwm.normbordercolor", normbordercolor);
-        XRDB_LOAD_COLOR("dwm.normbgcolor", normbgcolor);
-        XRDB_LOAD_COLOR("dwm.normfgcolor", normfgcolor);
-        XRDB_LOAD_COLOR("dwm.selbordercolor", selbordercolor);
-        XRDB_LOAD_COLOR("dwm.selbgcolor", selbgcolor);
-        XRDB_LOAD_COLOR("dwm.selfgcolor", selfgcolor);
+        XRDB_LOAD_COLOR("dwm.normbordercolor", norm_border);
+        XRDB_LOAD_COLOR("dwm.normbgcolor", norm_bg);
+        XRDB_LOAD_COLOR("dwm.normfgcolor", norm_fg);
+        XRDB_LOAD_COLOR("dwm.selbordercolor", sel_border);
+        XRDB_LOAD_COLOR("dwm.selbgcolor", sel_bg);
+        XRDB_LOAD_COLOR("dwm.selfgcolor", sel_fg);
       }
     }
   }
@@ -1670,7 +1700,8 @@ setup(void)
 	/* init appearance */
 	scheme = ecalloc(LENGTH(colors), sizeof(Clr *));
 	for (i = 0; i < LENGTH(colors); i++)
-		scheme[i] = drw_scm_create(drw, colors[i], 3);
+		/*scheme[i] = drw_scm_create(drw, colors[i], 3);*/
+    scheme[i] = drw_scm_create(drw, (char **)colors[i], 3);
 	/* init bars */
 	updatebars();
 	updatestatus();
@@ -2124,9 +2155,12 @@ updatewmhints(Client *c)
 		if (c == selmon->sel && wmh->flags & XUrgencyHint) {
 			wmh->flags &= ~XUrgencyHint;
 			XSetWMHints(dpy, c->win, wmh);
-		} else
-			c->isurgent = (wmh->flags & XUrgencyHint) ? 1 : 0;
-		if (wmh->flags & InputHint)
+		} else{
+             c->isurgent = (wmh->flags & XUrgencyHint) ? True : False;
+                       if (c->isurgent)
+                               XSetWindowBorder(dpy, c->win, scheme[SchemeUrg][ColBorder].pixel);
+    }
+					if (wmh->flags & InputHint)
 			c->neverfocus = !wmh->input;
 		else
 			c->neverfocus = 0;
@@ -2218,8 +2252,9 @@ xrdb(const Arg *arg)
   loadxrdb();
   int i;
   for (i = 0; i < LENGTH(colors); i++)
-                scheme[i] = drw_scm_create(drw, colors[i], 3);
-  focus(NULL);
+                /*scheme[i] = drw_scm_create(drw, colors[i], 3);*/
+                scheme[i] = drw_scm_create(drw, (char **)colors[i], 3);
+    focus(NULL);
   arrange(NULL);
 }
 
