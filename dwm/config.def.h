@@ -96,14 +96,15 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
 	{ MODKEY|ShiftMask,             XK_Tab,    view,           {0} },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
-  { MODKEY,                       XK_x,      setlayout,      {.v = &layouts[3]} }, // Spiral mode
-  { MODKEY,                       XK_c,      setlayout,      {.v = &layouts[4]} }, // Dwindle mode
+  { MODKEY,                       XK_a,      setlayout,      {.v = &layouts[3]} }, // Spiral mode
+  { MODKEY,                       XK_s,      setlayout,      {.v = &layouts[4]} }, // Dwindle mode
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 
   { MODKEY,                       XK_u,      spawn,          SHCMD("~/scripts/open-url.sh") },
   { MODKEY,                       XK_w,      spawn,          SHCMD("~/.local/bin/dwmstyle") },
+  { MODKEY,                       XK_c,      spawn,          SHCMD("~/.local/bin/share") },
   { MODKEY|ShiftMask,  XK_End,      spawn,          SHCMD("systemctl poweroff") },   // Shutdown
   { MODKEY|ShiftMask,  XK_Home,     spawn,          SHCMD("systemctl reboot") },    // Reboot
   { MODKEY|ShiftMask,  XK_Insert,   spawn,          SHCMD("systemctl hibernate") }, // Hibernate
