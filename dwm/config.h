@@ -86,6 +86,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
   { MODKEY|ShiftMask,             XK_Return, spawn,          {.v = (const char*[]){ "kitty", NULL } } },
   { MODKEY,                       XK_p,      spawn,          {.v = (const char*[]){ "zen-browser", NULL } } },
+  { MODKEY|ShiftMask,             XK_p,      spawn,          {.v = (const char*[]){ "qutebrowser", NULL } } },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_Tab,    focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
@@ -96,15 +97,16 @@ static const Key keys[] = {
 	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
 	{ MODKEY|ShiftMask,             XK_Tab,    view,           {0} },
 	{ MODKEY,                       XK_q,      killclient,     {0} },
-  { MODKEY,                       XK_a,      setlayout,      {.v = &layouts[3]} }, // Spiral mode
-  { MODKEY,                       XK_s,      setlayout,      {.v = &layouts[4]} }, // Dwindle mode
+  { MODKEY,                       XK_x,      setlayout,      {.v = &layouts[3]} }, // Spiral mode
+  { MODKEY,                       XK_c,      setlayout,      {.v = &layouts[4]} }, // Dwindle mode
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 
   { MODKEY,                       XK_u,      spawn,          SHCMD("~/scripts/open-url.sh") },
   { MODKEY,                       XK_w,      spawn,          SHCMD("~/.local/bin/dwmstyle") },
-  { MODKEY,                       XK_c,      spawn,          SHCMD("~/.local/bin/share") },
+  { MODKEY,                       XK_s,      spawn,          SHCMD("~/.local/bin/share") },
+
   { MODKEY|ShiftMask,  XK_End,      spawn,          SHCMD("systemctl poweroff") },   // Shutdown
   { MODKEY|ShiftMask,  XK_Home,     spawn,          SHCMD("systemctl reboot") },    // Reboot
   { MODKEY|ShiftMask,  XK_Insert,   spawn,          SHCMD("systemctl hibernate") }, // Hibernate
