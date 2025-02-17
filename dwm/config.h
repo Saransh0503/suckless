@@ -29,7 +29,7 @@ static const char dmenufont[]       = "0xProto Nerd Font:size=9";
 /*};*/
 
 /* tagging */
-static const char *tags[] = { "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  " };
+static const char *tags[] = { "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  ", "  " };
 
 static const Rule rules[] = {
 	/* xprop(1):
