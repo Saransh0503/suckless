@@ -38,7 +38,7 @@ static const Rule rules[] = {
 	 */
 	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
 	{ "Gimp",    NULL,     NULL,           0,         1,          0,           0,        -1 },
-	{ "Firefox", NULL,     NULL,           1 << 8,    0,          0,          -1,        -1 },
+	{ "zen-browser", NULL,     NULL,           1 << 8,    0,          0,          -1,        -1 },
 	{ "st-256color",      NULL,     NULL,           0,         0,          1,           0,        -1 },
 	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
 };
@@ -102,7 +102,8 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
-
+/*                          scripts                            */
+  { MODKEY,                       XK_y,      spawn,          SHCMD("~/home/think/scripts/youtube-local/start_server.sh") },
   { MODKEY,                       XK_u,      spawn,          SHCMD("~/scripts/open-url.sh") },
   { MODKEY,                       XK_w,      spawn,          SHCMD("~/.local/bin/dwmstyle") },
   { MODKEY,                       XK_s,      spawn,          SHCMD("~/.local/bin/share") },

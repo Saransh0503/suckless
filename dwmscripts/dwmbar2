@@ -1,15 +1,15 @@
 #!/bin/bash
 
-# CPU Usage
-cpu() {
-  read cpu a b c previdle rest < /proc/stat
-  prevtotal=$((a + b + c + previdle))
-  sleep 0.5
-  read cpu a b c idle rest < /proc/stat
-  total=$((a + b + c + idle))
-  cpu=$((100 * ((total - prevtotal) - (idle - previdle)) / (total - prevtotal)))
-  echo -e "$cpu%"
-}
+# # CPU Usage
+# cpu() {
+#   read cpu a b c previdle rest < /proc/stat
+#   prevtotal=$((a + b + c + previdle))
+#   sleep 0.5
+#   read cpu a b c idle rest < /proc/stat
+#   total=$((a + b + c + idle))
+#   cpu=$((100 * ((total - prevtotal) - (idle - previdle)) / (total - prevtotal)))
+#   echo -e "$cpu%"
+# }
 
 # RAM Usage
 mem() {
@@ -17,24 +17,24 @@ mem() {
   echo -e "$mem"
 }
 
-# Disk Usage
-hdd() {
-  hdd="$(df -h --output=used,pcent / | tail -1)"
-  echo -e "$hdd"
-}
+# # Disk Usage
+# hdd() {
+#   hdd="$(df -h --output=used,pcent / | tail -1)"
+#   echo -e "$hdd"
+# }
 
-# CPU Temperature with dynamic symbol
-temp() {
-  TEMP="$(sensors | awk 'BEGIN {i = 0; t = 0} /Core/ {++i; t += $3} END {if (i > 0) {printf "%0.1f", t / i}}')"
-  if (( $(echo "$TEMP < 40" | bc -l) )); then
-    SYMBOL="  "
-  elif (( $(echo "$TEMP >= 40" | bc -l) && $(echo "$TEMP <= 70" | bc -l) )); then
-    SYMBOL="  "
-  else
-    SYMBOL="  "
-  fi
-  echo -e "$TEMP°C $SYMBOL"
-}
+# # CPU Temperature with dynamic symbol
+# temp() {
+#   TEMP="$(sensors | awk 'BEGIN {i = 0; t = 0} /Core/ {++i; t += $3} END {if (i > 0) {printf "%0.1f", t / i}}')"
+#   if (( $(echo "$TEMP < 40" | bc -l) )); then
+#     SYMBOL="  "
+#   elif (( $(echo "$TEMP >= 40" | bc -l) && $(echo "$TEMP <= 70" | bc -l) )); then
+#     SYMBOL="  "
+#   else
+#     SYMBOL="  "
+#   fi
+#   echo -e "$TEMP°C $SYMBOL"
+# }
 
 ## BATT
 power() {
@@ -105,7 +105,7 @@ clock() {
 
 # Infinite loop to update the dwm status bar
 while true; do
-  xsetroot -name "[    $(cpu)  ]    [    $(mem)  ]    [    $(hdd)  ]    [  $(power)  ]    [  $(temp)  ]    [  $(volume)  ]    [  $(brightness)  ]    [    $(clock)  ] "
+ xsetroot -name "  [    $(mem)  ]    [  $(power)  ]    [  $(volume)  ]    [  $(brightness)  ]    [    $(clock)  ] "
   sleep 3s
 done &
 
