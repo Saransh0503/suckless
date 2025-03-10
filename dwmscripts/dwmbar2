@@ -97,15 +97,22 @@ brightness() {
   echo -e "$percent% $SYMBOL"
 }
 
-# Date and Time
-clock() {
-  dte="$(date +"%a, %B %d %I:%M %p" | sed 's/  / /g')"
+# Date
+dte() {
+  dte="$(date +"%a, %B %d" | sed 's/  / /g')"
   echo -e "$dte"
 }
 
+#time 
+tme() {
+  tme="$(date +"%I:%M %p")"
+  echo -e "$tme"
+}
+
+
 # Infinite loop to update the dwm status bar
 while true; do
- xsetroot -name "  [    $(mem)  ]    [  $(power)  ]    [  $(volume)  ]    [  $(brightness)  ]    [    $(clock)  ] "
-  sleep 3s
+  xsetroot -name "  [    $(mem)  ]    [  $(power)  ]    [  $(volume)  ]    [  $(brightness)  ]    [    $(dte)  ]    [ $(tme) ]"
+  sleep 1s
 done &
 

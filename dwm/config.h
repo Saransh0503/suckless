@@ -80,9 +80,11 @@ static const char *brightness_down[] = { "brightnessctl", "set", "5%-", NULL };
 static const char *vol_up[]   = { "pamixer", "--increase", "5", NULL };
 static const char *vol_down[] = { "pamixer", "--decrease", "5", NULL };
 static const char *vol_mute[] = { "pamixer", "--toggle-mute", NULL };
+static const char *redshift_toggle[] = { "redshift", "-x", "&&", "redshift", "-l", "30.7363:76.7884", NULL };
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_z,      spawn,          {.v = dmenucmd } },
+  { MODKEY,                       XK_n,      spawn,          SHCMD("st -e newsboat") },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
   { MODKEY|ShiftMask,             XK_Return, spawn,          {.v = (const char*[]){ "kitty", NULL } } },
   { MODKEY,                       XK_p,      spawn,          {.v = (const char*[]){ "zen-browser", NULL } } },
@@ -91,6 +93,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_Tab,    focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
+  { MODKEY,                       XK_r,      spawn,          {.v = redshift_toggle } },
 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
@@ -103,7 +106,6 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 /*                          scripts                            */
-  { MODKEY,                       XK_y,      spawn,          SHCMD("~/home/think/scripts/youtube-local/start_server.sh") },
   { MODKEY,                       XK_u,      spawn,          SHCMD("~/scripts/open-url.sh") },
   { MODKEY,                       XK_w,      spawn,          SHCMD("~/.local/bin/dwmstyle") },
   { MODKEY,                       XK_s,      spawn,          SHCMD("~/.local/bin/share") },
