@@ -75,10 +75,10 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[] = { "dmenu_run", "-fn", dmenufont, "-nb", norm_bg, "-nf", norm_fg,
 "-sb", sel_border, "-sf", sel_fg, NULL };
 static const char *termcmd[]  = { "st", NULL };
-static const char *brightness_up[]   = { "brightnessctl", "set", "5%+", NULL };
-static const char *brightness_down[] = { "brightnessctl", "set", "5%-", NULL };
-static const char *vol_up[]   = { "pamixer", "--increase", "5", NULL };
-static const char *vol_down[] = { "pamixer", "--decrease", "5", NULL };
+static const char *brightness_up[]   = { "brightnessctl", "set", "1%+", NULL };
+static const char *brightness_down[] = { "brightnessctl", "set", "1%-", NULL };
+static const char *vol_up[]   = { "pamixer", "--increase", "1", NULL };
+static const char *vol_down[] = { "pamixer", "--decrease", "1", NULL };
 static const char *vol_mute[] = { "pamixer", "--toggle-mute", NULL };
 static const char *redshift_toggle[] = { "redshift", "-x", "&&", "redshift", "-l", "30.7363:76.7884", NULL };
 static const Key keys[] = {
